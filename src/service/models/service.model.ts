@@ -8,6 +8,7 @@ import {
 } from "sequelize-typescript";
 import { Appointment } from "../../appointment/models/appointment.model";
 import { ServiceAppointment } from "./serviceAppointment.model";
+import { IsNumber, IsString } from "class-validator";
 
 interface IServiceCreationAttr {
   name: string;
@@ -31,6 +32,7 @@ export class Service extends Model<Service, IServiceCreationAttr> {
   @Column({
     type: DataType.STRING(50),
   })
+  @IsString()
   declare name: string;
 
   @ApiProperty({
@@ -40,6 +42,7 @@ export class Service extends Model<Service, IServiceCreationAttr> {
   @Column({
     type: DataType.STRING(50),
   })
+  @IsString()
   declare description: string;
 
   @ApiProperty({
@@ -49,6 +52,7 @@ export class Service extends Model<Service, IServiceCreationAttr> {
   @Column({
     type: DataType.DECIMAL(10, 2),
   })
+  @IsNumber()
   declare price: number;
 
   @BelongsToMany(() => Appointment, () => ServiceAppointment)

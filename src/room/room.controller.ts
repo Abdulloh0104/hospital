@@ -6,13 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { RoomService } from "./room.service";
 import { CreateRoomDto } from "./dto/create-room.dto";
 import { UpdateRoomDto } from "./dto/update-room.dto";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { Room } from "./models/room.model";
+import { UserGuard } from "../common/guards/user.guard";
+import { RolesGuard } from "../common/guards/role.guard";
+import { Roles } from "../common/decorators/role.decorator";
 
+@ApiBearerAuth()
 @Controller("room")
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
@@ -23,6 +28,8 @@ export class RoomController {
     description: "Activation",
     type: Room,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("admin", "superadmin", "staff")
   @Post()
   create(@Body() createRoomDto: CreateRoomDto) {
     return this.roomService.create(createRoomDto);
@@ -34,6 +41,8 @@ export class RoomController {
     description: "List of Rooms",
     type: [Room],
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("admin", "superadmin", "staff", "doctor")
   @Get()
   findAll() {
     return this.roomService.findAll();
@@ -45,6 +54,8 @@ export class RoomController {
     description: "Room",
     type: Room,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("admin", "superadmin", "staff", "doctor")
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.roomService.findOne(+id);
@@ -56,6 +67,8 @@ export class RoomController {
     description: "Update Room",
     type: Room,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("admin", "superadmin", "staff")
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateRoomDto: UpdateRoomDto) {
     return this.roomService.update(+id, updateRoomDto);
@@ -67,6 +80,8 @@ export class RoomController {
     description: "Delete Room",
     type: Room,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("superadmin")
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.roomService.remove(+id);

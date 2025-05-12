@@ -1,11 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  Column,
-  DataType,
-  HasMany,
-  Model,
-  Table,
-} from "sequelize-typescript";
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { LabTest } from "../../lab-test/models/lab-test.model";
 import { Department } from "../../department/models/department.model";
 
@@ -19,7 +13,7 @@ interface IDoctorCreationAttr {
   sertificate: string;
   level: string;
   specialization: string;
-  salary: string;
+  salary: number;
 }
 
 @Table({ tableName: "doctor", createdAt: true, updatedAt: false })
@@ -66,6 +60,7 @@ export class Doctor extends Model<Doctor, IDoctorCreationAttr> {
   })
   @Column({
     type: DataType.STRING(50),
+    unique: true,
   })
   declare email: string;
 
@@ -119,14 +114,14 @@ export class Doctor extends Model<Doctor, IDoctorCreationAttr> {
     description: "doctor salary",
   })
   @Column({
-    type: DataType.STRING,
+    type: DataType.DECIMAL(10, 2),
   })
-  declare salary: string;
+  declare salary: number;
 
   @Column({
     type: DataType.STRING,
   })
-  declare refreshToken: string;
+  declare hashed_refresh_token: string;
 
   @HasMany(() => LabTest)
   Labtests: LabTest[];

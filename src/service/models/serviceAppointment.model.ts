@@ -13,10 +13,18 @@ export class ServiceAppointment extends Model<
   ServiceAppointment,
   IServiceAppointmentCreationAttr
 > {
+  @ApiProperty({
+    example: "2",
+    description: "Appointment Id number",
+  })
   @ForeignKey(() => Appointment)
   @Column({ type: DataType.INTEGER })
   declare appointmentId: number;
 
+  @ApiProperty({
+    example: "2",
+    description: "Service Id number",
+  })
   @ForeignKey(() => Service)
   @Column({ type: DataType.INTEGER })
   declare serviceId: number;

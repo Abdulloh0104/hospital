@@ -1,10 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PaymentService } from './payment.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Payment } from './models/payment.model';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from "@nestjs/common";
+import { PaymentService } from "./payment.service";
+import { CreatePaymentDto } from "./dto/create-payment.dto";
+import { UpdatePaymentDto } from "./dto/update-payment.dto";
+import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { Payment } from "./models/payment.model";
+import { UserGuard } from "../common/guards/user.guard";
+import { RolesGuard } from "../common/guards/role.guard";
+import { Roles } from "../common/decorators/role.decorator";
 
+@ApiBearerAuth()
 @Controller("payment")
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
@@ -15,6 +28,8 @@ export class PaymentController {
     description: "Activation",
     type: Payment,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("staff", "admin")
   @Post()
   create(@Body() createPaymentDto: CreatePaymentDto) {
     return this.paymentService.create(createPaymentDto);
@@ -26,6 +41,7 @@ export class PaymentController {
     description: "List of Payments",
     type: [Payment],
   })
+  @UseGuards(UserGuard)
   @Get()
   findAll() {
     return this.paymentService.findAll();
@@ -37,6 +53,7 @@ export class PaymentController {
     description: "Payment",
     type: Payment,
   })
+  @UseGuards(UserGuard)
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.paymentService.findOne(+id);
@@ -48,6 +65,8 @@ export class PaymentController {
     description: "Update Payment",
     type: Payment,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("staff", "admin")
   @Patch(":id")
   update(@Param("id") id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
     return this.paymentService.update(+id, updatePaymentDto);
@@ -59,6 +78,8 @@ export class PaymentController {
     description: "Delete Payment",
     type: Payment,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("admin")
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.paymentService.remove(+id);

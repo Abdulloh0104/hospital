@@ -7,7 +7,6 @@ interface IStaffcreationAttr {
   role: string;
   email: string;
   password: string;
-  refreshToken: string;
   phoneNumber: string;
   departmentId: number;
 }
@@ -35,7 +34,7 @@ export class Staff extends Model<Staff, IStaffcreationAttr> {
     description: "roli",
   })
   @Column({
-    type: DataType.ENUM("creator", "admin", "drugMaker"),
+    type: DataType.ENUM("creator", "admin", "drugMaker","staff"),
   })
   declare role: string;
 
@@ -69,19 +68,19 @@ export class Staff extends Model<Staff, IStaffcreationAttr> {
   @Column({
     type: DataType.STRING,
   })
-  declare refreshToken: string;
+  declare hashed_refresh_token: string;
 
   @ApiProperty({
     example: "3",
     description: "Id number of Department",
   })
-    @ForeignKey(() => Department)
+  @ForeignKey(() => Department)
   @Column({
     type: DataType.INTEGER,
     onDelete: "SET NULL",
   })
   declare departmentId: number;
 
-    @BelongsTo(() => Department)
-    department: Department;
+  @BelongsTo(() => Department)
+  department: Department;
 }

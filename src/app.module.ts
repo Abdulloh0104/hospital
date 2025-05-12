@@ -1,11 +1,9 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { TelegrafModule } from "nestjs-telegraf";
-import { BotModule } from "./bot/bot.module";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { PatientModule } from "./patient/patient.module";
 import { Patient } from "./patient/models/patient.model";
-import { BOT_NAME } from "./app.constance";
+
 import { ServiceModule } from "./service/service.module";
 import { Service } from "./service/models/service.model";
 import { AppointmentModule } from "./appointment/appointment.module";
@@ -31,18 +29,12 @@ import { DepartmentModule } from './department/department.module';
 import { Department } from "./department/models/department.model";
 import { BadModule } from './bad/bad.module';
 import { Bad } from "./bad/models/bad.model";
+import { MailModule } from "./mail/mail.module";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: ".env", isGlobal: true }),
-    TelegrafModule.forRootAsync({
-      botName: BOT_NAME,
-      useFactory: () => ({
-        token: process.env.BOT_TOKEN!,
-        middleweres: [],
-        include: [BotModule],
-      }),
-    }),
     SequelizeModule.forRoot({
       dialect: "postgres",
       host: process.env.PG_HOST,
@@ -64,7 +56,7 @@ import { Bad } from "./bad/models/bad.model";
         Prescription,
         Staff,
         Department,
-        Bad
+        Bad,
       ],
       autoLoadModels: true,
       sync: { alter: true },
@@ -83,6 +75,8 @@ import { Bad } from "./bad/models/bad.model";
     StaffModule,
     DepartmentModule,
     BadModule,
+    MailModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

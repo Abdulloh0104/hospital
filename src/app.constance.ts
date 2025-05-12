@@ -1,3 +1,2 @@
 
-
-export const BOT_NAME = 'Skidkachi bot'
+export const ROLES_KEY = "roles";

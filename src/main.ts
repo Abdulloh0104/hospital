@@ -16,9 +16,9 @@ async function start() {
         const allowedOrigins = [
           "http://localhost:8000",
           "http://localhost:3000",
-          "https://skidkachi.uz",
-          "https://api/skidkachi.uz",
-          "https://skidkachi.vercel.app",
+          "https://hospital.uz",
+          "https://api/hospital.uz",
+          "https://hospital.vercel.app",
         ];
         if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);

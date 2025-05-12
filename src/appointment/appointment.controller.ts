@@ -1,10 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AppointmentService } from './appointment.service';
-import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Appointment } from './models/appointment.model';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from "@nestjs/common";
+import { AppointmentService } from "./appointment.service";
+import { CreateAppointmentDto } from "./dto/create-appointment.dto";
+import { UpdateAppointmentDto } from "./dto/update-appointment.dto";
+import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { Appointment } from "./models/appointment.model";
+import { Roles } from "../common/decorators/role.decorator";
+import { UserGuard } from "../common/guards/user.guard";
+import { RolesGuard } from "../common/guards/role.guard";
 
+@ApiBearerAuth()
 @Controller("appointment")
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
@@ -15,6 +28,8 @@ export class AppointmentController {
     description: "Activation",
     type: Appointment,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("superadmin", "admin", "staff", "doctor")
   @Post()
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentService.create(createAppointmentDto);
@@ -26,6 +41,8 @@ export class AppointmentController {
     description: "List of Appointments",
     type: [Appointment],
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("superadmin", "admin", "staff", "doctor", "patient")
   @Get()
   findAll() {
     return this.appointmentService.findAll();
@@ -37,6 +54,8 @@ export class AppointmentController {
     description: "Appointment",
     type: Appointment,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("superadmin", "admin", "staff", "doctor", "patient")
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.appointmentService.findOne(+id);
@@ -48,6 +67,8 @@ export class AppointmentController {
     description: "Update Appointment",
     type: Appointment,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("doctor", "staff")
   @Patch(":id")
   update(
     @Param("id") id: string,
@@ -62,6 +83,8 @@ export class AppointmentController {
     description: "Delete Appointment",
     type: Appointment,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("admin", "staff", "doctor")
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.appointmentService.remove(+id);

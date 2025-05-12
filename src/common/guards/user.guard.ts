@@ -45,7 +45,7 @@ export class UserGuard implements CanActivate {
         throw new UnauthorizedException("Unauthorized User");
       }
 
-      if (!payload.is_active) {
+      if (!payload.is_active && payload.role == "patient") {
         throw new ForbiddenException("Ruxsat etilmagen");
       }
       req.user = payload;

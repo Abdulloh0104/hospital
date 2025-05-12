@@ -6,17 +6,24 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { LabTestService } from "./lab-test.service";
 import { CreateLabTestDto } from "./dto/create-lab-test.dto";
 import { UpdateLabTestDto } from "./dto/update-lab-test.dto";
 import { LabTest } from "./models/lab-test.model";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { Roles } from "../common/decorators/role.decorator";
+import { RolesGuard } from "../common/guards/role.guard";
+import { UserGuard } from "../common/guards/user.guard";
 
+@ApiBearerAuth()
 @Controller("lab-test")
 export class LabTestController {
   constructor(private readonly labTestService: LabTestService) {}
 
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("admin", "doctor", "staff")
   @ApiOperation({ summary: "CREATE" })
   @ApiResponse({
     status: 200,
@@ -34,6 +41,7 @@ export class LabTestController {
     description: "List of LabTests",
     type: [LabTest],
   })
+  @UseGuards(UserGuard)
   @Get()
   findAll() {
     return this.labTestService.findAll();
@@ -45,6 +53,7 @@ export class LabTestController {
     description: "LabTest",
     type: LabTest,
   })
+  @UseGuards(UserGuard)
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.labTestService.findOne(+id);
@@ -56,6 +65,8 @@ export class LabTestController {
     description: "Update LabTest",
     type: LabTest,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("admin", "doctor", "staff")
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateLabTestDto: UpdateLabTestDto) {
     return this.labTestService.update(+id, updateLabTestDto);
@@ -67,6 +78,8 @@ export class LabTestController {
     description: "Delete LabTest",
     type: LabTest,
   })
+  @UseGuards(UserGuard, RolesGuard)
+  @Roles("admin", "doctor", "staff")
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.labTestService.remove(+id);

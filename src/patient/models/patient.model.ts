@@ -67,6 +67,7 @@ export class Patient extends Model<Patient, IPatientCreationAttr> {
   })
   @Column({
     type: DataType.STRING(50),
+    unique:true
   })
   declare email: string;
 
@@ -116,14 +117,21 @@ export class Patient extends Model<Patient, IPatientCreationAttr> {
   declare gender: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4(),
   })
-  declare activationLink: string;
+  declare activation_link: string;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  declare is_active: boolean;
 
   @Column({
     type: DataType.STRING,
   })
-  declare refreshToken: string;
+  declare hashed_refresh_token: string;
 
   @HasMany(() => Appointment)
   appointments: Appointment[];

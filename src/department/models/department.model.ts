@@ -17,7 +17,7 @@ interface IDepartmentCreationAttr {
   headDoctorId: number;
 }
 
-@Table({ tableName: "staff", timestamps: false })
+@Table({ tableName: "department", timestamps: false })
 export class Department extends Model<Department, IDepartmentCreationAttr> {
   @Column({
     type: DataType.INTEGER,
@@ -45,8 +45,8 @@ export class Department extends Model<Department, IDepartmentCreationAttr> {
   declare description: string;
 
   @ApiProperty({
-    example: "info",
-    description: "extra info",
+    example: "3",
+    description: "Doctor Id number",
   })
   @ForeignKey(() => Doctor)
   @Column({

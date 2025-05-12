@@ -38,6 +38,13 @@ export class CreatePatientDto {
   password: string;
 
   @ApiProperty({
+    example: "bemor paroli",
+    description: "write patient password eagin",
+  })
+  @IsString()
+  confirm_password: string;
+
+  @ApiProperty({
     example: "bemor haqida qo'shimcha ma'lumot",
     description: "extra info about patient",
   })

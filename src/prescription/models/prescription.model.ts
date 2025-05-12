@@ -23,9 +23,8 @@ export class Prescription extends Model<
   })
   declare id: number;
 
-  
   @ApiProperty({
-    example: "80",
+    example: "8000",
     description: "Amount",
   })
   @Column({
@@ -34,7 +33,7 @@ export class Prescription extends Model<
   declare dosage: string;
 
   @ApiProperty({
-    example: "80",
+    example: "15/160",
     description: "3 mahal",
   })
   @Column({
@@ -43,7 +42,7 @@ export class Prescription extends Model<
   declare duration: string;
 
   @ApiProperty({
-    example: "80",
+    example: "Kottalaga",
     description: "2 tadan",
   })
   @Column({
@@ -52,8 +51,8 @@ export class Prescription extends Model<
   declare frequency: string;
 
   @ApiProperty({
-    example: "80",
-    description: "2 tadan",
+    example: "8",
+    description: "Id number of medication",
   })
   @ForeignKey(() => Medication)
   @Column({
@@ -64,6 +63,10 @@ export class Prescription extends Model<
   @BelongsTo(() => Medication)
   medication: Medication;
 
+  @ApiProperty({
+    example: "5",
+    description: "Id number of medical record",
+  })
   @ForeignKey(() => MedicalRecord)
   @Column({
     type: DataType.INTEGER,

@@ -31,12 +31,19 @@ export class CreateStaffDto {
   password: string;
 
   @ApiProperty({
+    example: "staff paroli rewrite",
+    description: "staff password rewrite",
+  })
+  @IsString()
+  confirm_password: string;
+
+  @ApiProperty({
     example: "901234567",
     description: "phoone Number",
   })
   @IsString()
   phoneNumber: string;
-  
+
   @ApiProperty({
     example: "3",
     description: "Id number of Department",

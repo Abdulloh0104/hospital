@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { MedicalRecord } from "../../medical-records/models/medical-record.model";
 import { Bad } from "../../bad/models/bad.model";
+import { IsNumber, IsString } from "class-validator";
 
 interface IRoomCreationAttr {
   roomNumber: number;
@@ -17,6 +18,7 @@ export class Room extends Model<Room, IRoomCreationAttr> {
     autoIncrement: true,
     primaryKey: true,
   })
+  @IsNumber()
   declare id: number;
 
   @ApiProperty({
@@ -26,6 +28,7 @@ export class Room extends Model<Room, IRoomCreationAttr> {
   @Column({
     type: DataType.INTEGER,
   })
+  @IsNumber()
   declare roomNumber: number;
 
   @ApiProperty({
@@ -42,6 +45,7 @@ export class Room extends Model<Room, IRoomCreationAttr> {
       "double"
     ),
   })
+  @IsString()
   declare type: string;
 
   @ApiProperty({
@@ -51,6 +55,7 @@ export class Room extends Model<Room, IRoomCreationAttr> {
   @Column({
     type: DataType.STRING,
   })
+  @IsString()
   declare description: string;
 
   @ApiProperty({
@@ -66,6 +71,7 @@ export class Room extends Model<Room, IRoomCreationAttr> {
       "reserved"
     ),
   })
+  @IsString()
   declare status: string;
 
   @HasMany(() => MedicalRecord)
